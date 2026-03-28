@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>意念科技 - AI API 订阅平台</title>
+  <meta name="description" content="意念科技 AI API 订阅平台，支持多种 AI 模型，按 Token 计费">
+  <meta name="theme-color" content="#e53935">
+  
+  <!-- 安全头 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #e53935;
+      --primary-dark: #c62828;
+      --secondary: #ff7043;
+      --accent: #ffc107;
+      --bg: #f5f5f5;
+      --bg-white: #ffffff;
+      --text-primary: #212121;
+      --text-secondary: #757575;
+      --success: #4caf50;
+      --error: #f44336;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Noto Sans SC', 'PingFang SC', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    [lang="ar"] { direction: rtl; font-family: 'Noto Sans Arabic', sans-serif; }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #e53935 0%, #ff7043 100%);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 20px;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    
+    .nav-link:hover { background: rgba(255,255,255,0.2); }
+    
+    .btn {
+      padding: 10px 24px;
+      border-radius: var(--radius-full);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: white;
+      color: var(--primary);
+    }
+    
+    .btn-primary:hover { transform: scale(1.05); }
+    
+    .btn-secondary {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #e53935 0%, #ff7043 100%);
+      padding: 80px 24px;
+      text-align: center;
+      color: white;
+    }
+    
+    .hero-title {
+      font-size: clamp(32px, 6vw, 56px);
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(16px, 3vw, 22px);
+      opacity: 0.95;
+      margin-bottom: 32px;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn-large {
+      padding: 16px 32px;
+      font-size: 18px;
+    }
+    
+    /* Pricing Section */
+    .section {
+      padding: 60px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section-title {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+    }
+    
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    
+    .pricing-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .pricing-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+    
+    .pricing-card.popular {
+      border: 2px solid var(--primary);
+    }
+    
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 4px 16px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .plan-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .plan-price {
+      font-size: 40px;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    
+    .plan-price span { font-size: 16px; color: var(--text-secondary); font-weight: 400; }
+    
+    .plan-credits {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    
+    .plan-features {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    
+    .plan-features li {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .plan-features li::before { content: '✓'; color: var(--success); font-weight: bold; }
+    
+    .btn-plan {
+      width: 100%;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-plan:hover { background: var(--primary-dark); }
+    
+    /* Features Section */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    
+    .feature-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .feature-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .feature-desc {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    /* API Section */
+    .api-section {
+      background: #1a1a2e;
+      padding: 60px 24px;
+      color: white;
+    }
+    
+    .code-block {
+      background: #0d0d1a;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      overflow-x: auto;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .code-comment { color: #6a9955; }
+    .code-string { color: #ce9178; }
+    .code-key { color: #9cdcfe; }
+    .code-value { color: #b5cea8; }
+    
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 24px;
+    }
+    
+    .modal-overlay.active { display: flex; }
+    
+    .modal {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      max-width: 450px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.1);
+    }
+    
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    
+    .form-error {
+      color: var(--error);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    
+    .btn-submit:hover { background: var(--primary-dark); }
+    .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+    
+    .modal-footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #eee;
+    }
+    
+    .modal-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      top: 100px;
+      right: 24px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .toast {
+      background: #333;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      animation: slideIn 0.3s ease;
+    }
+    
+    .toast.success { background: var(--success); }
+    .toast.error { background: var(--error); }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    /* Dashboard */
+    .dashboard {
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .api-keys-section {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .api-key-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .api-key-value {
+      font-family: monospace;
+      font-size: 14px;
+    }
+    
+    .btn-copy {
+      padding: 8px 16px;
+      background: var(--bg-white);
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .btn-copy:hover { background: var(--bg); }
+    
+    /* Footer */
+    .footer {
+      background: #1a1a2e;
+      color: white;
+      padding: 40px 24px;
+      margin-top: 60px;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+    
+    .footer-section h4 {
+      margin-bottom: 16px;
+      color: var(--accent);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 8px;
+    }
+    
+    .footer-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .footer-links a:hover { color: white; }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 32px;
+      margin-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+      font-size: 14px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; }
+      .nav-links { flex-wrap: wrap; justify-content: center; }
+      .hero { padding: 40px 16px; }
+      .section { padding: 40px 16px; }
+    }
+    
+    /* Print */
+    @media print {
+      .header, .footer, .btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="/" class="logo">
+        <div class="logo-icon">意</div>
+        <span>意念科技</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#pricing" class="nav-link" data-i18n="nav_pricing">定价</a>
+        <a href="#api" class="nav-link" data-i18n="nav_api">API</a>
+        <a href="#docs" class="nav-link" data-i18n="nav_docs">文档</a>
+        <button class="btn btn-secondary" onclick="openModal('login')" id="loginBtn" data-i18n="nav_login">登录</button>
+        <button class="btn btn-primary" onclick="openModal('register')" id="registerBtn" data-i18n="nav_register">注册</button>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Hero -->
+  <section class="hero">
+    <h1 class="hero-title" data-i18n="hero_title">AI API 订阅平台</h1>
+    <p class="hero-subtitle" data-i18n="hero_subtitle">支持 GPT-4、Claude 等多种模型，按 Token 精准计费</p>
+    <div class="hero-cta">
+      <a href="#pricing" class="btn btn-primary btn-large" data-i18n="hero_cta_view">查看定价</a>
+      <button class="btn btn-secondary btn-large" onclick="openModal('register')" data-i18n="hero_cta_start">免费开始</button>
+    </div>
+  </section>
+  
+  <!-- Features -->
+  <section class="section">
+    <h2 class="section-title" data-i18n="features_title">为什么选择我们</h2>
+    <p class="section-subtitle" data-i18n="features_subtitle">企业级 AI API 服务，安全可靠</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🚀</div>
+        <h3 class="feature-title" data-i18n="feature_speed_title">极速响应</h3>
+        <p class="feature-desc" data-i18n="feature_speed_desc">全球 CDN 加速，延迟 < 100ms</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3 class="feature-title" data-i18n="feature_security_title">安全可靠</h3>
+        <p class="feature-desc" data-i18n="feature_security_desc">端到端加密，数据不存储</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3 class="feature-title" data-i18n="feature_billing_title">精准计费</h3>
+        <p class="feature-desc" data-i18n="feature_billing_desc">按实际用量计费，无隐藏费用</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛠️</div>
+        <h3 class="feature-title" data-i18n="feature_support_title">专业支持</h3>
+        <p class="feature-desc" data-i18n="feature_support_desc">7x24 小时技术支持</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Pricing -->
+  <section class="section" id="pricing">
+    <h2 class="section-title" data-i18n="pricing_title">选择适合你的计划</h2>
+    <p class="section-subtitle" data-i18n="pricing_subtitle">灵活的订阅方案，随时升级</p>
+    <div class="pricing-grid">
+      <!-- Free -->
+      <div class="pricing-card">
+        <h3 class="plan-name" data-i18n="plan_free">免费版</h3>
+        <div class="plan-price">$0<span>/月</span></div>
+        <p class="plan-credits">100 积分/月</p>
+        <ul class="plan-features">
+          <li data-i18n="feature_api_calls">100 次 API 调用</li>
+          <li data-i18n="feature_ai_tokens">10,000 AI Tokens</li>
+          <li data-i18n="feature_community">社区支持</li>
+        </ul>
+        <button class="btn btn-plan" onclick="selectPlan('free')" data-i18n="btn_start_free">免费开始</button>
+      </div>
+      
+      <!-- Basic -->
+      <div class="pricing-card">
+        <h3 class="plan-name" data-i18n="plan_basic">基础版</h3>
+        <div class="plan-price">$9.99<span>/月</span></div>
+        <p class="plan-credits">1,000 积分/月</p>
+        <ul class="plan-features">
+          <li>1,000 次 API 调用</li>
+          <li>100,000 AI Tokens</li>
+          <li>邮件支持</li>
+          <li>1GB 存储</li>
+        </ul>
+        <button class="btn btn-plan" onclick="selectPlan('basic')" data-i18n="btn_subscribe">订阅</button>
+      </div>
+      
+      <!-- Pro -->
+      <div class="pricing-card popular">
+        <div class="popular-badge" data-i18n="badge_popular">最受欢迎</div>
+        <h3 class="plan-name" data-i18n="plan_pro">专业版</h3>
+        <div class="plan-price">$49.99<span>/月</span></div>
+        <p class="plan-credits">10,000 积分/月</p>
+        <ul class="plan-features">
+          <li>10,000 次 API 调用</li>
+          <li>1,000,000 AI Tokens</li>
+          <li>优先支持</li>
+          <li>10GB 存储</li>
+        </ul>
+        <button class="btn btn-plan" onclick="selectPlan('pro')" data-i18n="btn_subscribe">订阅</button>
+      </div>
+      
+      <!-- Enterprise -->
+      <div class="pricing-card">
+        <h3 class="plan-name" data-i18n="plan_enterprise">企业版</h3>
+        <div class="plan-price">$199.99<span>/月</span></div>
+        <p class="plan-credits">100,000 积分/月</p>
+        <ul class="plan-features">
+          <li data-i18n="feature_unlimited">无限 API 调用</li>
+          <li data-i18n="feature_unlimited_tokens">无限 AI Tokens</li>
+          <li data-i18n="feature_dedicated">专属支持</li>
+          <li>100GB 存储</li>
+        </ul>
+        <button class="btn btn-plan" onclick="selectPlan('enterprise')" data-i18n="btn_contact">联系我们</button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- API Example -->
+  <section class="api-section" id="api">
+    <h2 class="section-title">简单易用的 API</h2>
+    <p class="section-subtitle" style="opacity: 0.8;">只需几行代码即可集成 AI 能力</p>
+    <div class="code-block">
+      <span class="code-comment">// 调用 AI API 示例</span><br>
+      <span class="code-key">const</span> response = <span class="code-key">await</span> fetch(<span class="code-string">'/api/ai/chat'</span>, {<br>
+      &nbsp;&nbsp;method: <span class="code-string">'POST'</span>,<br>
+      &nbsp;&nbsp;headers: {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'Content-Type'</span>: <span class="code-string">'application/json'</span>,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'X-API-Key'</span>: <span class="code-string">'yiin_your_api_key'</span><br>
+      &nbsp;&nbsp;},<br>
+      &nbsp;&nbsp;body: JSON.stringify({<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;model: <span class="code-string">'gpt-4'</span>,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;messages: [{ role: <span class="code-string">'user'</span>, content: <span class="code-string">'你好！'</span> }]<br>
+      &nbsp;&nbsp;})<br>
+      });<br><br>
+      <span class="code-key">const</span> data = <span class="code-key">await</span> response.json();<br>
+      console.log(data.choices[<span class="code-value">0</span>].message.content);
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>产品</h4>
+        <ul class="footer-links">
+          <li><a href="#">AI API</a></li>
+          <li><a href="#">模型列表</a></li>
+          <li><a href="#">定价</a></li>
+          <li><a href="#">文档</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>公司</h4>
+        <ul class="footer-links">
+          <li><a href="#">关于我们</a></li>
+          <li><a href="#">博客</a></li>
+          <li><a href="#">招聘</a></li>
+          <li><a href="#">联系我们</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>支持</h4>
+        <ul class="footer-links">
+          <li><a href="#">帮助中心</a></li>
+          <li><a href="#">API 状态</a></li>
+          <li><a href="#">服务条款</a></li>
+          <li><a href="#">隐私政策</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2024 意念科技. All rights reserved.
+    </div>
+  </footer>
+  
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal">
+      <h2 class="modal-title" data-i18n="modal_login_title">登录</h2>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_email">邮箱</label>
+          <input type="email" class="form-input" name="email" required 
+                 placeholder="your@email.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_password">密码</label>
+          <input type="password" class="form-input" name="password" required 
+                 placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div id="loginError" class="form-error" style="display: none;"></div>
+        <button type="submit" class="btn-submit" data-i18n="btn_login">登录</button>
+      </form>
+      <div class="modal-footer">
+        <span data-i18n="modal_no_account">还没有账号？</span>
+        <a href="#" class="modal-link" onclick="switchModal('register')" data-i18n="modal_register_link">立即注册</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Register Modal -->
+  <div class="modal-overlay" id="registerModal">
+    <div class="modal">
+      <h2 class="modal-title" data-i18n="modal_register_title">注册</h2>
+      <form id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_name">用户名</label>
+          <input type="text" class="form-input" name="name" required placeholder="您的名字">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_email">邮箱</label>
+          <input type="email" class="form-input" name="email" required placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_password">密码</label>
+          <input type="password" class="form-input" name="password" required 
+                 placeholder="至少8位，含大小写字母和数字" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+          <p class="form-hint" data-i18n="form_password_hint">至少8位，需包含大小写字母和数字</p>
+        </div>
+        <div id="registerError" class="form-error" style="display: none;"></div>
+        <button type="submit" class="btn-submit" data-i18n="btn_register">注册</button>
+      </form>
+      <div class="modal-footer">
+        <span data-i18n="modal_has_account">已有账号？</span>
+        <a href="#" class="modal-link" onclick="switchModal('login')" data-i18n="modal_login_link">立即登录</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Dashboard Modal -->
+  <div class="modal-overlay" id="dashboardModal">
+    <div class="modal" style="max-width: 600px;">
+      <h2 class="modal-title">控制面板</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">当前计划</div>
+          <div class="stat-value" id="userTier">Free</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">剩余积分</div>
+          <div class="stat-value" id="userCredits">100</div>
+        </div>
+      </div>
+      <div class="api-keys-section">
+        <h3 style="margin-bottom: 16px;">API Keys</h3>
+        <div id="apiKeysList"></div>
+        <button class="btn btn-plan" onclick="generateApiKey()" style="margin-top: 12px;">
+          生成新 API Key
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="logout()">退出登录</button>
+        <button class="btn btn-primary" onclick="closeModal('dashboard')">关闭</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+  
+  <script>
+    // ==================== 国际化 ====================
+    const i18n = {
+      zh: {
+        nav_pricing: '定价', nav_api: 'API', nav_docs: '文档', nav_login: '登录', nav_register: '注册',
+        hero_title: 'AI API 订阅平台', hero_subtitle: '支持 GPT-4、Claude 等多种模型，按 Token 精准计费',
+        hero_cta_view: '查看定价', hero_cta_start: '免费开始',
+        features_title: '为什么选择我们', features_subtitle: '企业级 AI API 服务，安全可靠',
+        feature_speed_title: '极速响应', feature_speed_desc: '全球 CDN 加速，延迟 < 100ms',
+        feature_security_title: '安全可靠', feature_security_desc: '端到端加密，数据不存储',
+        feature_billing_title: '精准计费', feature_billing_desc: '按实际用量计费，无隐藏费用',
+        feature_support_title: '专业支持', feature_support_desc: '7x24 小时技术支持',
+        pricing_title: '选择适合你的计划', pricing_subtitle: '灵活的订阅方案，随时升级',
+        plan_free: '免费版', plan_basic: '基础版', plan_pro: '专业版', plan_enterprise: '企业版',
+        badge_popular: '最受欢迎', btn_subscribe: '订阅', btn_start_free: '免费开始', btn_contact: '联系我们',
+        modal_login_title: '登录', modal_register_title: '注册',
+        form_email: '邮箱', form_password: '密码', form_name: '用户名',
+        form_password_hint: '至少8位，需包含大小写字母和数字',
+        btn_login: '登录', btn_register: '注册',
+        modal_no_account: '还没有账号？', modal_register_link: '立即注册',
+        modal_has_account: '已有账号？', modal_login_link: '立即登录',
+        toast_login_success: '登录成功！', toast_register_success: '注册成功！',
+        toast_api_key_generated: 'API Key 生成成功！'
+      },
+      en: {
+        nav_pricing: 'Pricing', nav_api: 'API', nav_docs: 'Docs', nav_login: 'Login', nav_register: 'Sign Up',
+        hero_title: 'AI API Subscription Platform', hero_subtitle: 'Support GPT-4, Claude and more, pay by token',
+        hero_cta_view: 'View Pricing', hero_cta_start: 'Start Free',
+        features_title: 'Why Choose Us', features_subtitle: 'Enterprise-grade AI API service',
+        pricing_title: 'Choose Your Plan', pricing_subtitle: 'Flexible subscription, upgrade anytime',
+        plan_free: 'Free', plan_basic: 'Basic', plan_pro: 'Pro', plan_enterprise: 'Enterprise',
+        badge_popular: 'Most Popular', btn_subscribe: 'Subscribe', btn_start_free: 'Start Free', btn_contact: 'Contact Us',
+        modal_login_title: 'Login', modal_register_title: 'Sign Up',
+        form_email: 'Email', form_password: 'Password', form_name: 'Name',
+        form_password_hint: 'At least 8 characters with uppercase, lowercase and numbers',
+        btn_login: 'Login', btn_register: 'Sign Up',
+        modal_no_account: "Don't have an account?", modal_register_link: 'Sign Up',
+        modal_has_account: 'Already have an account?', modal_login_link: 'Login',
+        toast_login_success: 'Login successful!', toast_register_success: 'Registration successful!',
+        toast_api_key_generated: 'API Key generated!'
+      }
+    };
+    
+    let currentLang = 'zh';
+    
+    function t(key) {
+      return i18n[currentLang]?.[key] || i18n.zh[key] || key;
+    }
+    
+    // ==================== 模态框 ====================
+    function openModal(type) {
+      closeAllModals();
+      document.getElementById(type + 'Modal').classList.add('active');
+    }
+    
+    function closeModal(type) {
+      document.getElementById(type + 'Modal').classList.remove('active');
+    }
+    
+    function closeAllModals() {
+      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+    }
+    
+    function switchModal(type) {
+      closeAllModals();
+      setTimeout(() => openModal(type), 100);
+    }
+    
+    // 点击遮罩关闭
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeAllModals();
+      });
+    });
+    
+    // ==================== 认证 ====================
+    let currentUser = null;
+    let accessToken = null;
+    
+    async function handleLogin(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        email: form.email.value,
+        password: form.password.value
+      };
+      
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await res.json();
+        
+        if (result.success) {
+          currentUser = result.user;
+          accessToken = result.accessToken;
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('user', JSON.stringify(currentUser));
+          showToast(t('toast_login_success'), 'success');
+          closeAllModals();
+          updateUserUI();
+        } else {
+          document.getElementById('loginError').textContent = result.error;
+          document.getElementById('loginError').style.display = 'block';
+        }
+      } catch (err) {
+        document.getElementById('loginError').textContent = '网络错误，请重试';
+        document.getElementById('loginError').style.display = 'block';
+      }
+    }
+    
+    async function handleRegister(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        password: form.password.value
+      };
+      
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await res.json();
+        
+        if (result.success) {
+          currentUser = result.user;
+          accessToken = result.accessToken;
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('user', JSON.stringify(currentUser));
+          showToast(t('toast_register_success'), 'success');
+          closeAllModals();
+          updateUserUI();
+        } else {
+          document.getElementById('registerError').textContent = result.error_zh || result.error;
+          document.getElementById('registerError').style.display = 'block';
+        }
+      } catch (err) {
+        document.getElementById('registerError').textContent = '网络错误，请重试';
+        document.getElementById('registerError').style.display = 'block';
+      }
+    }
+    
+    function logout() {
+      currentUser = null;
+      accessToken = null;
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      updateUserUI();
+      closeAllModals();
+    }
+    
+    function updateUserUI() {
+      const loginBtn = document.getElementById('loginBtn');
+      const registerBtn = document.getElementById('registerBtn');
+      
+      if (currentUser) {
+        loginBtn.textContent = currentUser.name;
+        loginBtn.onclick = () => openModal('dashboard');
+        registerBtn.style.display = 'none';
+        
+        document.getElementById('userTier').textContent = currentUser.tier?.toUpperCase() || 'FREE';
+        document.getElementById('userCredits').textContent = currentUser.credits || 0;
+      } else {
+        loginBtn.textContent = '登录';
+        loginBtn.onclick = () => openModal('login');
+        registerBtn.style.display = 'inline-flex';
+      }
+    }
+    
+    // ==================== API Key ====================
+    async function generateApiKey() {
+      if (!accessToken) return;
+      
+      try {
+        const res = await fetch('/api/auth/api-key', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        
+        const result = await res.json();
+        
+        if (result.success) {
+          showToast(t('toast_api_key_generated'), 'success');
+          loadApiKeys();
+        }
+      } catch (err) {
+        showToast('生成失败', 'error');
+      }
+    }
+    
+    async function loadApiKeys() {
+      if (!accessToken) return;
+      
+      try {
+        const res = await fetch('/api/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        
+        const result = await res.json();
+        
+        if (result.success && result.apiKeys) {
+          const list = document.getElementById('apiKeysList');
+          list.innerHTML = result.apiKeys.map(key => `
+            <div class="api-key-item">
+              <code class="api-key-value">${key.key}</code>
+              <button class="btn-copy" onclick="copyToClipboard('${key.key}')">复制</button>
+            </div>
+          `).join('') || '<p>暂无 API Key</p>';
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text);
+      showToast('已复制', 'success');
+    }
+    
+    // ==================== 订阅 ====================
+    async function selectPlan(planId) {
+      if (!currentUser) {
+        showToast('请先登录', 'error');
+        openModal('login');
+        return;
+      }
+      
+      showToast('正在处理...', 'success');
+      // 实际生产环境跳转支付页面
+    }
+    
+    // ==================== Toast ====================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast ' + type;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => toast.remove(), 3000);
+    }
+    
+    // ==================== 初始化 ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      // 恢复登录状态
+      const savedToken = localStorage.getItem('accessToken');
+      const savedUser = localStorage.getItem('user');
+      
+      if (savedToken && savedUser) {
+        accessToken = savedToken;
+        currentUser = JSON.parse(savedUser);
+        updateUserUI();
+      }
+    });
+    
+    // 安全：防止 XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "yiinian-tech-platform",
+  "version": "1.0.0",
+  "description": "意念科技 - AI API 订阅平台",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": ["ai", "api", "subscription", "ecommerce"],
+  "author": "意念科技",
+  "license": "MIT"
+}
