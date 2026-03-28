@@ -1,147 +1,115 @@
-# 意念科技 - 响应式电商平台
+# 意念科技 - AI API 订阅平台
 
-一个类似拼多多风格的响应式电商首页，支持全平台访问和多语言切换。
+一个类似 Crunchbase 的订阅系统 + AI API Token 计费平台。
 
-## ✨ 特性
+## 🌐 在线访问
 
-- 🎨 **拼多多风格设计** - 红色主题 + 阶梯价格 + 拼团标签
-- 📱 **全平台兼容** - Windows/macOS/Linux/iOS/Android/鸿蒙
-- 🌍 **6种语言支持** - 中文/英语/法语/德语/日语/阿拉伯语
-- 📐 **响应式布局** - 自动适配手机/平板/电脑/超大屏
-- ⚡ **纯前端实现** - 无需后端，可直接部署到 GitHub Pages 或 Vercel
-- 🎯 **性能优化** - CSS 变量、动画优化、字体预加载
+- **电商首页**: https://13888285815.github.io/huimart-ecommerce/
+- **订阅平台**: https://13888285815.github.io/huimart-ecommerce/platform.html
 
-## 🚀 部署方式
+## ✨ 功能特性
 
-### 方式一：GitHub Pages
+### 🔐 用户认证系统
+- JWT Token 认证
+- API Key 管理
+- 安全密码验证（8位+大小写+数字）
 
-1. 创建 GitHub 仓库
-2. 上传 `index.html` 文件
-3. Settings → Pages → 选择分支 → Save
-4. 访问 `https://yourusername.github.io/repo-name`
+### 💳 订阅计划 (类似 Crunchbase)
+| 计划 | 价格 | 积分/月 | 特性 |
+|------|------|---------|------|
+| 免费版 | $0 | 100 | 社区支持 |
+| 基础版 | $9.99 | 1,000 | 邮件支持 |
+| 专业版 | $49.99 | 10,000 | 优先支持 |
+| 企业版 | $199.99 | 100,000 | 专属支持 |
 
-### 方式二：Vercel
+### 🤖 AI API 计费
+- 支持 GPT-4、Claude 等模型
+- 按 Token 精准计费
+- 实时余额查询
 
-**方法 A：通过 CLI**
-```bash
-# 安装 Vercel CLI
-npm i -g vercel
+### 🛡️ 安全防护
+- XSS 防护
+- CSRF 防护
+- SQL 注入防护
+- 内容安全策略 (CSP)
+- HTTP 安全头
 
-# 在项目目录执行
-vercel
+### 🌍 多语言支持
+- 🇨🇳 中文
+- 🇺🇸 English
+- 🇫🇷 Français
+- 🇩🇪 Deutsch
+- 🇯🇵 日本語
+- 🇸🇦 العربية (RTL)
 
-# 按提示操作即可
-```
+### 📱 全平台兼容
+- Windows / macOS / Linux
+- iPhone / iPad
+- Android / Android Pad
+- 鸿蒙系统
+- 自动响应式布局
 
-**方法 B：通过 GitHub 导入**
-1. 将代码推送到 GitHub
-2. 登录 [vercel.com](https://vercel.com)
-3. Import Project → 选择 GitHub 仓库
-4. 自动部署完成
-
-### 方式三：本地预览
-
-```bash
-# 方式1: 直接打开
-open index.html
-
-# 方式2: 使用本地服务器
-python3 -m http.server 8080
-# 访问 http://localhost:8080
-
-# 方式3: 使用 Node.js
-npx serve .
-```
-
-## 🌐 浏览器兼容性
-
-| 浏览器 | 支持版本 |
-|--------|----------|
-| Chrome | 80+ |
-| Safari | 13+ |
-| Firefox | 75+ |
-| Edge | 80+ |
-| 微信浏览器 | ✅ |
-| QQ浏览器 | ✅ |
-| UC浏览器 | ✅ |
-| 华为浏览器 | ✅ |
-| 三星浏览器 | ✅ |
-
-## 📱 设备兼容性
-
-- ✅ iPhone (SE ~ 15 Pro Max)
-- ✅ iPad (Mini ~ Pro)
-- ✅ Android 手机 (各种尺寸)
-- ✅ Android 平板
-- ✅ 华为设备 (鸿蒙系统)
-- ✅ Windows 电脑
-- ✅ MacBook
-- ✅ Linux 桌面
-
-## 🌍 多语言支持
-
-| 语言 | 代码 | 文字方向 |
-|------|------|----------|
-| 中文 | zh | LTR |
-| English | en | LTR |
-| Français | fr | LTR |
-| Deutsch | de | LTR |
-| 日本語 | ja | LTR |
-| العربية | ar | RTL |
-
-阿拉伯语支持 RTL (从右到左) 布局。
-
-## 📁 文件结构
+## 📁 项目结构
 
 ```
-pinduoduo-clone/
-├── index.html      # 主页面 (包含 HTML + CSS + JS)
-├── README.md       # 说明文档
-├── vercel.json     # Vercel 配置
-└── .gitignore      # Git 忽略文件
+├── index.html          # 电商首页
+├── platform.html       # 订阅平台
+├── api/
+│   ├── auth.js         # 用户认证 API
+│   ├── ai.js           # AI 计费 API
+│   ├── shop.js         # 商城 API
+│   └── subscribe.js    # 订阅 API
+├── vercel.json         # Vercel 配置
+└── package.json        # 项目配置
 ```
 
-## 🔧 自定义修改
+## 🚀 部署
 
-### 修改颜色主题
+### GitHub Pages
+已自动部署到: https://13888285815.github.io/huimart-ecommerce/
 
-在 `index.html` 中找到 `:root` 部分的 CSS 变量：
+### Vercel 部署
+1. 访问 https://vercel.com/new
+2. 导入 GitHub 仓库 `13888285815/huimart-ecommerce`
+3. 点击 Deploy
 
-```css
-:root {
-  --primary: #e53935;        /* 主色调 */
-  --primary-dark: #c62828;   /* 深色 */
-  --secondary: #ff7043;      /* 辅助色 */
-  /* ... */
-}
+## 📖 API 文档
+
+### 认证 API
+```
+POST /api/auth/register  - 注册
+POST /api/auth/login     - 登录
+POST /api/auth/api-key   - 生成 API Key
+GET  /api/auth/me        - 获取用户信息
 ```
 
-### 修改商品数据
-
-在 `<script>` 标签内找到 `products` 数组：
-
-```javascript
-const products = [
-  { id: 1, name: '商品名称', price: 89, originalPrice: 299, sales: 12580, badge: '热卖' },
-  // 添加更多商品...
-];
+### AI API
+```
+POST /api/ai/chat        - AI 聊天 (需 API Key)
+POST /api/ai/embeddings  - 文本嵌入
+GET  /api/ai/models      - 模型列表
+GET  /api/ai/usage       - 使用统计
 ```
 
-### 添加真实图片
-
-将商品图片替换为真实 URL：
-
-```javascript
-// 在 productImage 部分修改
-<div class="product-image">
-  <img src="https://your-image-url.jpg" alt="${product.name}">
-</div>
+### 订阅 API
 ```
+GET  /api/subscribe/plans    - 计划列表
+POST /api/subscribe/create   - 创建订阅
+GET  /api/subscribe/status   - 订阅状态
+POST /api/subscribe/cancel   - 取消订阅
+```
+
+## 🔒 安全特性
+
+- ✅ X-Content-Type-Options: nosniff
+- ✅ X-Frame-Options: DENY
+- ✅ X-XSS-Protection: 1; mode=block
+- ✅ Strict-Transport-Security
+- ✅ Content-Security-Policy
+- ✅ 输入验证和清理
+- ✅ SQL 注入防护
+- ✅ XSS 攻击防护
 
 ## 📄 License
 
-MIT License - 可自由使用和修改
-
----
-
-**注意**: 本项目仅供学习和参考，不可用于商业用途。不复制任何特定平台的设计代码。
+MIT License
